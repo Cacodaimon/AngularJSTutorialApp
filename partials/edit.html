@@ -1,0 +1,25 @@
+<form class="form-horizontal" ng-submit="save()">
+    <input type="hidden" ng-model="bookmark.id"/>
+    <fieldset>
+        <legend>Edit a bookmark</legend>
+        <div class="control-group">
+            <label class="control-label" for="edit-title">Title</label>
+
+            <div class="controls">
+                <input name="title" id="edit-title" type="text" placeholder="A title" ng-model="bookmark.title"/>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="edit-url">URL</label>
+
+            <div class="controls">
+                <input name="url" id="edit-url" type="url" placeholder="www.cacodaemon.de" ng-model="bookmark.url"
+                       required/>
+                <span ng-hide="message == null" class="help-block">{{message}}</span>
+            </div>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-warning"><i class="icon-edit icon-white"></i> Edit</button>
+        </div>
+    </fieldset>
+</form>

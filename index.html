@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="cacoBookMark">
+<head>
+    <meta charset="utf-8">
+    <title>caco[miniBookMark]</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Guido Krömer">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <style>body {
+        padding-top: 80px;
+        }
+
+.example-enter-setup {
+  -webkit-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+  -moz-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+  -ms-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+  -o-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+  transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+  opacity: 0;
+}
+.example-enter-setup.example-enter-start {
+  opacity: 1;
+}
+</style>
+    <link rel="shortcut icon" href="../assets/ico/favicon.png">
+</head>
+
+<body>
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="brand" href="#/">caco[miniBookMark]</a>
+            <a href="#/add/" class="btn btn-success pull-right"><i class="icon-plus icon-white"></i> Add</a>
+        </div>
+    </div>
+</div>
+<div class="container" id="content">
+    <div class="row">
+        <div class="span12 example-animate-container" ng-view ng-animate="{enter: 'example-enter'}">
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.1.4/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.1.4/angular-resource.min.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
