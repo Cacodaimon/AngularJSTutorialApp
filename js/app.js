@@ -2,7 +2,7 @@ angular.module('cacoBookMark.service', ['ngResource']).factory('Rest', function 
     return $resource('api/bookmark/:id', {}, {
         query: {method: 'GET', isArray: true},
         get: {method: 'GET'},
-        delete: {method: 'DELETE'},
+        remove: {method: 'DELETE'},
         edit: {method: 'PUT'},
         add: {method: 'POST'}
     });
@@ -12,17 +12,18 @@ angular.module('cacoBookMark', ['cacoBookMark.service']).config(function ($httpP
     $httpProvider.defaults.transformRequest = function (data) {
         var str = [];
         for (var p in data) {
-            data[p] != undefined && str.push(encodeURIComponent(p) + '=' + encodeURIComponent(data[p]));
+            data[p] !== undefined && str.push(encodeURIComponent(p) + '=' + encodeURIComponent(data[p]));
         }
         return str.join('&');
     };
-    $httpProvider.defaults.headers.put['Content-Type'] = $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8';
-}).config(['$routeProvider', function ($routeProvider) {
-        $routeProvider.
-            when('/add', {templateUrl: 'partials/add.html', controller: BookMarkCtrl}).
-            when('/edit/:id', {templateUrl: 'partials/edit.html', controller: BookMarkCtrl}).
-            when('/', {templateUrl: 'partials/list.html', controller: BookMarkCtrl});
-    }]);
+    $httpProvider.defaults.headers.put['Content-Type'] = $httpProvider.defaults.headers.post['Content-Type'] =
+        'application/x-www-form-urlencoded; charset=UTF-8';
+})
+.config(['$routeProvider', function ($routeProvider) {
+    $routeProvider.when('/add',      {templateUrl: 'partials/add.html',  controller: BookMarkCtrl})
+                  .when('/edit/:id', {templateUrl: 'partials/edit.html', controller: BookMarkCtrl})
+                  .when('/',         {templateUrl: 'partials/list.html', controller: BookMarkCtrl});
+}]);
 
 var BookMarkCtrl = function ($scope, $routeParams, $location, Rest) {
     $scope.message = null;
@@ -30,7 +31,7 @@ var BookMarkCtrl = function ($scope, $routeParams, $location, Rest) {
     if ($routeParams.id) {
         $scope.bookmark = Rest.get({id: $routeParams.id});
     } 
-    if ($location.path() == '/') {
+    if ($location.path() === '/') {
         $scope.bookmarks = Rest.query();
     }
 
@@ -47,7 +48,7 @@ var BookMarkCtrl = function ($scope, $routeParams, $location, Rest) {
             return;
         }
 
-        Rest.delete({id: id}, {}, function (data) {
+        Rest.remove({id: id}, {}, function (data) {
             $location.path('/');
         });
     };

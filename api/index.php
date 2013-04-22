@@ -35,7 +35,7 @@ $app->get('/bookmark/:id', function ($id) use ($db, $app) {
 $app->post('/bookmark', function () use ($db, $app) {
     $title = $app->request()->post('title');
     $sth = $db->prepare('INSERT INTO bookmark (url, title) VALUES (?, ?);');
-    $success = $sth->execute([
+    $sth->execute([
         $url = $app->request()->post('url'),
         empty($title) ? getTitleFromUrl($url) : $title,
     ]);
