@@ -21,18 +21,18 @@ function returnResult($action, $success = true, $id = 0)
     ]);
 }
 
-$app->get('/bookmark', function () use ($db, $app) {
+$app->get('/bookmark', function () use (&$db, &$app) {
     $sth = $db->query('SELECT * FROM bookmark;');
     echo json_encode($sth->fetchAll(PDO::FETCH_CLASS));
 });
 
-$app->get('/bookmark/:id', function ($id) use ($db, $app) {
+$app->get('/bookmark/:id', function ($id) use (&$db, &$app) {
     $sth = $db->prepare('SELECT * FROM bookmark WHERE id = ? LIMIT 1;');
     $sth->execute([intval($id)]);
     echo json_encode($sth->fetchAll(PDO::FETCH_CLASS)[0]);
 });
 
-$app->post('/bookmark', function () use ($db, $app) {
+$app->post('/bookmark', function () use (&$db, &$app) {
     $title = $app->request()->post('title');
     $sth = $db->prepare('INSERT INTO bookmark (url, title) VALUES (?, ?);');
     $sth->execute([
@@ -43,7 +43,7 @@ $app->post('/bookmark', function () use ($db, $app) {
     returnResult('add', $sth->rowCount() == 1, $db->lastInsertId());
 });
 
-$app->put('/bookmark/:id', function ($id) use ($db, $app) {
+$app->put('/bookmark/:id', function ($id) use (&$db, &$app) {
     $sth = $db->prepare('UPDATE bookmark SET title = ?, url = ? WHERE id = ?;');
     $sth->execute([
         $app->request()->post('title'),
@@ -54,18 +54,14 @@ $app->put('/bookmark/:id', function ($id) use ($db, $app) {
     returnResult('edit', $sth->rowCount() == 1, $id);
 });
 
-$app->delete('/bookmark/:id', function ($id) use ($db) {
+$app->delete('/bookmark/:id', function ($id) use (&$db) {
     $sth = $db->prepare('DELETE FROM bookmark WHERE id = ?;');
     $sth->execute([intval($id)]);
 
     returnResult('delete', $sth->rowCount() == 1, $id);
 });
 
-$app->get('/urlfopen', function () {
-    returnResult('urlfopen', ini_get('allow_url_fopen'));
-});
-
-$app->get('/install', function () use ($db) {
+$app->get('/install', function () use (&$db) {
     $db->exec('	CREATE TABLE IF NOT EXISTS bookmark (
 					id INTEGER PRIMARY KEY, 
 					title TEXT, 
