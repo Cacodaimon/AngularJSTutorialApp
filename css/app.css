@@ -11,6 +11,6 @@ body{
     opacity: 0;
 }
 
-.fade-enter-setup.fade-enter-start{
+.fade-enter-start{
     opacity: 1;
 }
