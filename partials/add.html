@@ -5,7 +5,8 @@
             <label class="control-label" for="add-title">Title</label>
 
             <div class="controls">
-                <input id="add-title" name="title" type="text" placeholder="A title" ng-model="newBookMark.title"/>
+                <input id="add-title" name="title" type="text" placeholder="A title"
+                       ng-model="newBookMark.title"/>
             </div>
         </div>
         <div class="control-group ">
@@ -14,7 +15,6 @@
             <div class="controls">
                 <input id="add-url" name="url" type="url" placeholder="www.cacodaemon.de" required
                        ng-model="newBookMark.url"/>
-                <span ng-hide="message == null" class="help-block">{{message}}</span>
             </div>
         </div>
         <div class="form-actions">
