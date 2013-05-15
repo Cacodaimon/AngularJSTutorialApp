@@ -4,6 +4,7 @@ require '../Slim/Slim.php';
 \Slim\Slim::registerAutoloader();
 $app = new \Slim\Slim();
 $app->contentType('application/json');
+$app->expires('-1000000');
 $db = new PDO('sqlite:db.sqlite3');
 
 function getTitleFromUrl($url)
