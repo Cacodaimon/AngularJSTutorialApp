@@ -14,7 +14,7 @@
         <td>
             <img ng-src="icons/{{bookmark.id}}.ico" width="16px" height="16px" />
             <a target="_blank" href="{{bookmark.url}}">
-                <span ng-show="bookmark.title != ''">{{bookmark.title}}</span>
+                <span ng-show="bookmark.title != ''" ng-bind-html-unsafe="bookmark.title"></span>
                 <span ng-show="bookmark.title == ''">{{bookmark.url}}</span>
             </a>
         </td>
