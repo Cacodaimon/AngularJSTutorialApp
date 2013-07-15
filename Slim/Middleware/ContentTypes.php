@@ -6,7 +6,7 @@
  * @copyright   2011 Josh Lockhart
  * @link        http://www.slimframework.com
  * @license     http://www.slimframework.com/license
- * @version     2.2.0
+ * @version     2.3.0
  * @package     Slim
  *
  * MIT LICENSE
@@ -32,19 +32,19 @@
  */
 namespace Slim\Middleware;
 
-/**
- * Content Types
- *
- * This is middleware for a Slim application that intercepts
- * the HTTP request body and parses it into the appropriate
- * PHP data structure if possible; else it returns the HTTP
- * request body unchanged. This is particularly useful
- * for preparing the HTTP request body for an XML or JSON API.
- *
- * @package    Slim
- * @author     Josh Lockhart
- * @since      1.6.0
- */
+ /**
+  * Content Types
+  *
+  * This is middleware for a Slim application that intercepts
+  * the HTTP request body and parses it into the appropriate
+  * PHP data structure if possible; else it returns the HTTP
+  * request body unchanged. This is particularly useful
+  * for preparing the HTTP request body for an XML or JSON API.
+  *
+  * @package    Slim
+  * @author     Josh Lockhart
+  * @since      1.6.0
+  */
 class ContentTypes extends \Slim\Middleware
 {
     /**
@@ -58,12 +58,13 @@ class ContentTypes extends \Slim\Middleware
      */
     public function __construct($settings = array())
     {
-        $this->contentTypes = array_merge(array(
+        $defaults = array(
             'application/json' => array($this, 'parseJson'),
             'application/xml' => array($this, 'parseXml'),
             'text/xml' => array($this, 'parseXml'),
             'text/csv' => array($this, 'parseCsv')
-        ), $settings);
+        );
+        $this->contentTypes = array_merge($defaults, $settings);
     }
 
     /**
@@ -90,7 +91,7 @@ class ContentTypes extends \Slim\Middleware
      * @param  string $contentType
      * @return mixed
      */
-    protected function parse($input, $contentType)
+    protected function parse ($input, $contentType)
     {
         if (isset($this->contentTypes[$contentType]) && is_callable($this->contentTypes[$contentType])) {
             $result = call_user_func($this->contentTypes[$contentType], $input);

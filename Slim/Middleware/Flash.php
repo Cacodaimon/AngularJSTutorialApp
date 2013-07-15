@@ -32,19 +32,19 @@
  */
 namespace Slim\Middleware;
 
-/**
- * Flash
- *
- * This is middleware for a Slim application that enables
- * Flash messaging between HTTP requests. This allows you
- * set Flash messages for the current request, for the next request,
- * or to retain messages from the previous request through to
- * the next request.
- *
- * @package    Slim
- * @author     Josh Lockhart
- * @since      1.6.0
- */
+ /**
+  * Flash
+  *
+  * This is middleware for a Slim application that enables
+  * Flash messaging between HTTP requests. This allows you
+  * set Flash messages for the current request, for the next request,
+  * or to retain messages from the previous request through to
+  * the next request.
+  *
+  * @package    Slim
+  * @author     Josh Lockhart
+  * @since      1.6.0
+  */
 class Flash extends \Slim\Middleware implements \ArrayAccess, \IteratorAggregate
 {
     /**
@@ -59,7 +59,6 @@ class Flash extends \Slim\Middleware implements \ArrayAccess, \IteratorAggregate
 
     /**
      * Constructor
-     * @param  \Slim  $app
      * @param  array  $settings
      */
     public function __construct($settings = array())
@@ -97,7 +96,7 @@ class Flash extends \Slim\Middleware implements \ArrayAccess, \IteratorAggregate
      */
     public function now($key, $value)
     {
-        $this->messages['now'][(string)$key] = $value;
+        $this->messages['now'][(string) $key] = $value;
     }
 
     /**
@@ -110,7 +109,7 @@ class Flash extends \Slim\Middleware implements \ArrayAccess, \IteratorAggregate
      */
     public function set($key, $value)
     {
-        $this->messages['next'][(string)$key] = $value;
+        $this->messages['next'][(string) $key] = $value;
     }
 
     /**
