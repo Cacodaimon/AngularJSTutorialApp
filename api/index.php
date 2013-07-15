@@ -5,7 +5,6 @@ require '../Slim/Slim.php';
 $app = new \Slim\Slim();
 $app->contentType('application/json');
 $app->expires('-1000000');
-$app->config('debug', true);
 
 $app->container->singleton('db', function () {
     return new PDO('sqlite:db.sqlite3');
