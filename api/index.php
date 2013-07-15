@@ -11,11 +11,11 @@ $app->container->singleton('db', function () {
     return new PDO('sqlite:db.sqlite3');
 });
 
-$app->returnResult = function($data, $success = true, $id = 0) {
-    echo json_encode(is_array($data) ? $data : [
-         'action'    => $data,
-         'success'   => $success,
-         'id'        => $id,
+function returnResult($data, $success = true, $id = 0) {
+    echo json_encode(is_array($data) || is_object($data) ? $data : [
+        'action'    => $data,
+        'success'   => $success,
+        'id'        => $id,
     ], JSON_NUMERIC_CHECK);
 };
 
@@ -23,34 +23,29 @@ function getTitleFromUrl($url)
 {
     preg_match('/<title>(.+)<\/title>/', file_get_contents($url), $matches);
 
-    return mb_convert_encoding($matches[1], 'UTF-8', 'UTF-8');
-}
-
-function getFaviconFromUrl($url)
-{
-    $url = parse_url($url);
-    $url = urlencode(sprintf('%s://%s',
-        isset($url['scheme']) ? $url['scheme'] : 'http',
-        isset($url['host']) ? $url['host'] : strtolower($url['path'])));
-
-    return "http://g.etfv.co/$url";
+    return empty($matches) ? $url : mb_convert_encoding($matches[1], 'UTF-8', 'UTF-8');
 }
 
 function saveFavicon($url, $id)
 {
-    file_put_contents("../icons/$id.ico", file_get_contents(getFaviconFromUrl($url)));
+    $url = parse_url($url);
+    $url = urlencode(sprintf('%s://%s',
+            isset($url['scheme']) ? $url['scheme'] : 'http',
+            isset($url['host']) ? $url['host'] : strtolower($url['path'])));
+
+    copy("http://g.etfv.co/$url", "../icons/$id.ico");
 }
 
 $app->group('/bookmark', function () use ($app) {
     $app->get('', function () use ($app) {
         $sth = $app->db->query('SELECT * FROM bookmark;');
-        $app->returnResult($sth->fetchAll(PDO::FETCH_CLASS));
+        returnResult($sth->fetchAll(PDO::FETCH_CLASS));
     });
 
     $app->get('/:id', function ($id) use ($app) {
         $sth = $app->db->prepare('SELECT * FROM bookmark WHERE id = ? LIMIT 1;');
         $sth->execute([$id]);
-        $app->returnResult($sth->fetchAll(PDO::FETCH_CLASS)[0]);
+        returnResult($sth->fetchAll(PDO::FETCH_CLASS)[0]);
     });
 
     $app->post('', function () use ($app) {
@@ -62,7 +57,7 @@ $app->group('/bookmark', function () use ($app) {
         ]);
         saveFavicon($url, $id = $app->db->lastInsertId());
 
-        $app->returnResult('add', $sth->rowCount() == 1, $id);
+        returnResult('add', $sth->rowCount() == 1, $id);
     });
 
     $app->put('/:id', function ($id) use ($app) {
@@ -74,16 +69,15 @@ $app->group('/bookmark', function () use ($app) {
         ]);
         saveFavicon($url, $id);
 
-        $app->returnResult('add', $sth->rowCount() == 1, $id);
+        returnResult('add', $sth->rowCount() == 1, $id);
     });
 
     $app->delete('/:id', function ($id) use ($app) {
         $sth = $app->db->prepare('DELETE FROM bookmark WHERE id = ?;');
         $sth->execute([$id]);
-
         unlink("../icons/$id.ico");
 
-        $app->returnResult('delete', $sth->rowCount() == 1, $id);
+        returnResult('delete', $sth->rowCount() == 1, $id);
     });
 });
 
@@ -93,7 +87,7 @@ $app->get('/install', function () use ($app) {
                         title TEXT,
                         url TEXT UNIQUE);');
 
-    $app->returnResult('install');
+    returnResult('install');
 });
 
 $app->run();
